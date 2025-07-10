@@ -1,0 +1,46 @@
+users (table users)
+    user_id
+    username VARCHAR
+    passwordhash VARCHAR
+    email VARCHAR
+
+order_history (new table order_history)
+    item id (relate to items.id) INT
+    order date DATE
+
+cart (new table cart)
+    user id (relate to users) INT
+    item id (relate to item) INT
+    quantity INT
+
+items (table items)
+    id INT
+    name VARCHAR
+    description VARCHAR
+    price MONEY
+    make VARCHAR
+
+API ENDPOINTS
+
+/profile
+    -GET
+    -PUT
+    -DELETE
+
+/register
+    -POST
+
+/order_history
+    -GET
+
+/cart
+    -GET
+    -POST
+    -PUT
+    -DELETE
+
+/items
+    -GET
+    -POST (special admin)
+    -PUT (special admin)
+    -DELETE (special admin)

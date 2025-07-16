@@ -1,8 +1,8 @@
-const express = require('express')
-      bcrypt = require('bcrypt')
-      db = require('./database.js');
-
-router = express.Router();
+const express = require('express'),
+      bcrypt = require('bcrypt'),
+      db = require('./database.js'),
+      router = express.Router(),
+      passport = require("passport");
 
 //Items endpoints
 
@@ -52,7 +52,9 @@ router.post('/register', async (req, res) => {
 
 //Login endpoint
 
-//router.get('/login', )
+router.post('/login', passport.authenticate('local', { failureRedirect: "login"}), (req, res) => {
+    res.redirect("../");
+});
 
 //Pofile endpoints
 

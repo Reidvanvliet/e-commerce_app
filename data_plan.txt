@@ -33,7 +33,7 @@ API ENDPOINTS
 /order_history
     -GET
 
-/cart
+/cart (store cart data in local storage when not logged in)
     -GET
     -POST
     -PUT

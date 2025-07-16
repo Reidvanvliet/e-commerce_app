@@ -68,7 +68,22 @@ router.get('/profile', (req, res) => {
 
 router.put('/profile', async (req, res) => {
     if(req.user) {
-        db.query("UPDATE users SET (name, description, price, make) = ($2, $3, $4, $5) WHERE item_id = $1 RETURNING * ")
+        const user_id = req.user.user_id;
+        const { first_name, last_name, address } = req.body;
+
+        const result = await db.query("UPDATE users SET (first_name, last_name, address) = ($2, $3, $4) WHERE user_id = $1 RETURNING *", [user_id, first_name, last_name, address])
+
+        res.status(200).send(result.rows);
+    }
+})
+
+router.delete("/profile", async (req, res) => {
+    if(req.user) {
+        const user_id = req.user.user_id;
+
+        await db.query("DELETE FROM users WHERE user_id = $1", [user_id]);
+
+        res.status(204).send();
     }
 })
 

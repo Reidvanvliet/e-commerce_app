@@ -1,4 +1,4 @@
-import { Client } from 'pg'
+const { Client } = require('pg'); 
 
 const client = new Client({
     host: "localhost",
@@ -10,8 +10,12 @@ const client = new Client({
 
 client.connect();
 
-export const query = (text, params) => {
+const query = (text, params) => {
   return client.query(text, params)
 }
+
+module.exports = {
+  query
+};
 
 //use import * as db from './database.js' and db.query instead of pg directly

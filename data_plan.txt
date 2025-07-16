@@ -27,6 +27,9 @@ API ENDPOINTS
     -PUT
     -DELETE
 
+/login
+    -GET
+
 /register
     -POST
 

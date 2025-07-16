@@ -19,9 +19,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
+    "passport": "^0.7.0",
     "pg": "^8.16.3"
   }
 }

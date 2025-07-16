@@ -41,11 +41,11 @@ router.delete('/items', async (req, res) => {
 //Register endpoint
 
 router.post('/register', async (req, res) => {
-    const { username, password, email } = req.body;
+    const { first_name, last_name, password, email, address } = req.body;
     const salt = await bcrypt.genSalt(5);
     const hashedPass = await bcrypt.hash(password, salt);
 
-    db.query("INSERT INTO users(username, password_hash, email) VALUES ($1, $2, $3)", [username, hashedPass, email]);
+    db.query("INSERT INTO users(first_name, last_name, password_hash, email, address) VALUES ($1, $2, $3, $4, $5)", [first_name, last_name, hashedPass, email, address]);
 
     res.status(201).send();
 })
@@ -53,16 +53,23 @@ router.post('/register', async (req, res) => {
 //Login endpoint
 
 router.post('/login', passport.authenticate('local', { failureRedirect: "login"}), (req, res) => {
-    res.redirect("../");
+    res.status(200).send();
 });
 
 //Pofile endpoints
 
-router.get('/profile', async (req, res) => {
-    const { user_id } = req.body;
-    const result = await db.query("SELECT * FROM users WHERE user_id = $1", [user_id]);
+router.get('/profile', (req, res) => {
+    if(req.user) {
+        res.status(200).send(req.user);
+    } else {
+        res.status(401).send();
+    }
+})
 
-    res.status(200).send(result.rows);
+router.put('/profile', async (req, res) => {
+    if(req.user) {
+        db.query("UPDATE users SET (name, description, price, make) = ($2, $3, $4, $5) WHERE item_id = $1 RETURNING * ")
+    }
 })
 
 module.exports = router;

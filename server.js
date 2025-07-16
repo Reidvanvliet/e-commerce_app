@@ -11,7 +11,7 @@ server.set('port', process.env.PORT || 3000);
 
 server.use(session({
   secret: "19js434f",
-  cookie: {maxAge: 1000 * 60 * 60, secure: true, sameSite: 'none'},
+  cookie: {maxAge: 1000 * 60 * 60, sameSite: 'none'},
   saveUninitialized: false,
   resave: false,
 }));

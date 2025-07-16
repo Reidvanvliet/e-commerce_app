@@ -5,12 +5,12 @@ const bcrypt = require('bcrypt');
 
 passport.use(
     new Strategy(
-        async (username, password, done) => {
-            console.log(username);
-            console.log(password);
-
+        {
+            usernameField: 'email'
+        },
+        async (email, password, done) => {
             try {
-                const result = await db.query("SELECT * FROM users WHERE username = $1", [username]);
+                const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
                 if(result.rows.length < 1) {
                     return done(new Error("Username does not exist"), false);
@@ -22,7 +22,7 @@ passport.use(
                     return done(new Error("Password is incorrect"), false);
                 }
 
-                return done("Authenticated Successfully!", result.rows[0]);
+                return done(null, result.rows[0]);
 
             } catch (error) {
                 console.log(error)
@@ -33,10 +33,11 @@ passport.use(
 )
 
 passport.serializeUser((user, done) => {
-  return done(null, user.id);
+    return done(null, user.user_id);
 })
 
 passport.deserializeUser(async (id, done) => {
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    console.log("Deserializing User")
+    const result = await db.query("SELECT * FROM users WHERE user_id = $1", [id]);
     return done(null, result.rows[0]);
 })

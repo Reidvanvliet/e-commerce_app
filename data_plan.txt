@@ -1,8 +1,10 @@
 users (table users)
     user_id
-    username VARCHAR
+    first_name VARCHAR
+    last_name VARCHAR
     passwordhash VARCHAR
     email VARCHAR
+    address VARCHAR
 
 order_history (new table order_history)
     item id (relate to items.id) INT

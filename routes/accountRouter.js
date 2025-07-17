@@ -4,6 +4,45 @@ const express = require('express'),
       accountRouter = express.Router(),
       passport = require("passport");
 
+/**
+ * @swagger
+ * definitions:
+ *   User:
+ *     properties:
+ *       user_id:
+ *         type: integer
+ *       password:
+ *         type: string
+ *       email:
+ *         type: string
+ *       first_name:
+ *         type: string
+ *       last_name:
+ *         type: string
+ *       address:
+ *         type: string
+ */
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     tags:
+ *       - Account
+ *     description: Registers a user with a new user id and unique email
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       201:
+ *         description: Account created successfully
+ *         schema:
+ *           $ref: '#/definitions/User'
+ *       500:
+ *         description: User with email already exists
+ *       500:
+ *         description: Failed to register user
+ */
+
 //Register endpoint
 
 accountRouter.post('/register', async (req, res) => {
@@ -28,11 +67,45 @@ accountRouter.post('/register', async (req, res) => {
 
 //Login endpoint
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     tags:
+ *       - Account
+ *     description: login a user with passport-local method
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: logged in successfully
+ *         schema:
+ *           $ref: '#/definitions/User'
+ */
+
 accountRouter.post('/login', passport.authenticate('local', { failureRedirect: "login"}), (req, res) => {
     res.status(200).send();
 });
 
 //Pofile endpoints
+
+/**
+ * @swagger
+ * /profile:
+ *   get:
+ *     tags:
+ *       - Account
+ *     description: Return the users profile info if they are logged in
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Return user profile
+ *         schema:
+ *           $ref: '#/definitions/User'
+ *       401:
+ *         description: Unauthorized
+ */
 
 accountRouter.get('/profile', (req, res) => {
     if(req.user) {
@@ -41,6 +114,26 @@ accountRouter.get('/profile', (req, res) => {
         res.status(401).send();
     }
 })
+
+/**
+ * @swagger
+ * /profile:
+ *   put:
+ *     tags:
+ *       - Account
+ *     description: Updates the users profile info if they are logged in
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Profile update successfully
+ *         schema:
+ *           $ref: '#/definitions/User'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to update profile
+ */
 
 accountRouter.put('/profile', async (req, res) => {
     if(req.user) {
@@ -55,6 +148,26 @@ accountRouter.put('/profile', async (req, res) => {
         }
     }
 });
+
+/**
+ * @swagger
+ * /profile:
+ *   delete:
+ *     tags:
+ *       - Account
+ *     description: Deletes the users profile info if they are logged in
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       204:
+ *         description: Profile deleted (no data)
+ *         schema:
+ *           $ref: '#/definitions/User'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to delete profile
+ */
 
 accountRouter.delete("/profile", async (req, res) => {
     if(req.user) {

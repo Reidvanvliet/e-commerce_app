@@ -2,6 +2,41 @@ const express = require('express'),
       db = require('../database.js'),
       cartRouter = express.Router()
 
+/**
+ * @swagger
+ * definitions:
+ *   Cart:
+ *     properties:
+ *       id:
+ *         type: integer
+ *       user_id:
+ *         type: integer
+ *       item_id:
+ *         type: integer
+ *       quatity:
+ *         type: integer
+ */
+
+/**
+ * @swagger
+ * /cart:
+ *   get:
+ *     tags:
+ *       - Cart
+ *     description: Returns the currently logged in users cart
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Returns the contents of the users cart
+ *         schema:
+ *           $ref: '#/definitions/Cart'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to fetch cart
+ */
+
 cartRouter.get("/", async (req, res) => {
     if(req.user) {
         try {
@@ -16,6 +51,26 @@ cartRouter.get("/", async (req, res) => {
         res.status(401).send();
     }
 });
+
+/**
+ * @swagger
+ * /cart:
+ *   post:
+ *     tags:
+ *       - Cart
+ *     description: Adds an item to the current users cart
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       201:
+ *         description: Item added successfully
+ *         schema:
+ *           $ref: '#/definitions/Cart'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to add item to cart
+ */
 
 cartRouter.post("/", async (req, res) => {
     if(req.user) {
@@ -33,6 +88,26 @@ cartRouter.post("/", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /cart:
+ *   put:
+ *     tags:
+ *       - Cart
+ *     description: Updates the item in the cart (quantity)
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Item successfully updated
+ *         schema:
+ *           $ref: '#/definitions/Cart'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to update cart
+ */
+
 cartRouter.put("/", async (req, res) => {
     if(req.user) {
         try {
@@ -48,6 +123,26 @@ cartRouter.put("/", async (req, res) => {
         res.status(401).send();
     }
 });
+
+/**
+ * @swagger
+ * /cart:
+ *   delete:
+ *     tags:
+ *       - Cart
+ *     description: Deletes the item in the cart
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       204:
+ *         description: Item successfully deleted
+ *         schema:
+ *           $ref: '#/definitions/Cart'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to delete from cart
+ */
 
 cartRouter.delete("/", async (req, res) => {
     if(req.user) {

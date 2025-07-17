@@ -4,6 +4,41 @@ const express = require('express'),
 
 //Items endpoints
 
+/**
+ * @swagger
+ * definitions:
+ *   Item:
+ *     properties:
+ *       item_id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       description:
+ *         type: integer
+ *       price:
+ *         type: numeric
+ *       make:
+ *         type: string
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   get:
+ *     tags:
+ *       - Items
+ *     description: Returns all items
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An array of items
+ *         schema:
+ *           $ref: '#/definitions/Item'
+ *       500:
+ *         description: Failed to fetch items
+ */
+
 itemsRouter.get('/', async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM items ORDER BY name LIMIT 25");
@@ -13,6 +48,24 @@ itemsRouter.get('/', async (req, res) => {
         res.status(500).send({ error: 'Failed to fetch items' });
     }
 });
+
+/**
+ * @swagger
+ * /items/:itemId:
+ *   get:
+ *     tags:
+ *       - Items
+ *     description: Returns an item by id
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An item object
+ *         schema:
+ *           $ref: '#/definitions/Item'
+ *       500:
+ *         description: Failed to fetch item
+ */
 
 itemsRouter.get('/:itemId', async (req, res) => {
     try {
@@ -24,6 +77,24 @@ itemsRouter.get('/:itemId', async (req, res) => {
         res.status(500).send({ error: 'Failed to fetch item' });
     }
 });
+
+/**
+ * @swagger
+ * /items:
+ *   post:
+ *     tags:
+ *       - Items
+ *     description: Adds an item to the items table
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       201:
+ *         description: Item has been added to table
+ *         schema:
+ *           $ref: '#/definitions/Item'
+ *       500:
+ *         description: Failed to add item
+ */
 
 itemsRouter.post('/', async (req, res) => {
     try {
@@ -37,6 +108,24 @@ itemsRouter.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /items:
+ *   put:
+ *     tags:
+ *       - Items
+ *     description: Modifies an existing item
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Item has been updated
+ *         schema:
+ *           $ref: '#/definitions/Item'
+ *       500:
+ *         description: Failed to update item
+ */
+
 itemsRouter.put('/', async (req, res) => {
     try {
         const {item_id, name, description, price, make} = req.body;
@@ -48,6 +137,24 @@ itemsRouter.put('/', async (req, res) => {
         res.status(500).send({ error: 'Failed to update item' });
     }
 });
+
+/**
+ * @swagger
+ * /items:
+ *   delete:
+ *     tags:
+ *       - Items
+ *     description: Deletes an existing item
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       204:
+ *         description: Item has been deleted
+ *         schema:
+ *           $ref: '#/definitions/Item'
+ *       500:
+ *         description: Failed to delete item
+ */
 
 itemsRouter.delete('/', async (req, res) => {
     try {

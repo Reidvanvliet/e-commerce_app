@@ -2,6 +2,60 @@ const express = require('express'),
       db = require('../database.js'),
       ordersRouter = express.Router()
 
+/**
+ * @swagger
+ * definitions:
+ *   Order:
+ *     properties:
+ *       id:
+ *         type: integer
+ *       user_id:
+ *         type: string
+ *       order_date:
+ *         type: timestamp
+ *       total_amount:
+ *         type: numeric
+ *       shipping_address:
+ *         type: string
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   OrderItem:
+ *     properties:
+ *       id:
+ *         type: integer
+ *       order_id:
+ *         type: string
+ *       item_id:
+ *         type: integer
+ *       quantity:
+ *         type: integer
+ *       price_each:
+ *         type: numeric
+ */
+
+/**
+ * @swagger
+ * /orders:
+ *   post:
+ *     tags:
+ *       - Orders
+ *     description: Submits a new order and adds it to the orders table
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *         schema:
+ *           $ref: '#/definitions/Order'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to place order
+ */
+
 ordersRouter.post("/", async (req, res) => {
     if(req.user) { 
         const { user_id, address } = req.user;
@@ -28,6 +82,26 @@ ordersRouter.post("/", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     tags:
+ *       - Orders
+ *     description: Gets all the orders for the current user
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Returns the orders for the current user
+ *         schema:
+ *           $ref: '#/definitions/Order'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to fetch orders
+ */
+
 ordersRouter.get('/', async (req, res) => {
     if(req.user) {
         try {
@@ -42,6 +116,26 @@ ordersRouter.get('/', async (req, res) => {
         res.status(401).send();
     }
 });
+
+/**
+ * @swagger
+ * /orders/:orderId:
+ *   get:
+ *     tags:
+ *       - Orders
+ *     description: Gets the details of the specific order
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Returns the order details with the given id for the current user
+ *         schema:
+ *           $ref: '#/definitions/OrderItem'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Failed to fetch order details
+ */
 
 ordersRouter.get('/:orderId', async (req, res) => {
     if(req.user) {

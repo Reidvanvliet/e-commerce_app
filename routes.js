@@ -87,4 +87,62 @@ router.delete("/profile", async (req, res) => {
     }
 })
 
+//Cart routes
+
+router.get("/cart", async (req, res) => {
+    if(req.user) {
+        const user_id = req.user.user_id;
+
+        const result = await db.query("SELECT items.name, items.price, cart.quantity FROM cart JOIN items ON items.item_id = cart.item_id WHERE user_id = $1", [user_id]);
+
+        res.status(200).send(result.rows);
+    }
+        res.status(401).send();
+})
+
+router.post("/cart", async (req, res) => {
+    if(req.user) {
+        const user_id = req.user.user_id;
+        const { item_id, quantity } = req.body;
+
+        const result = await db.query("INSERT INTO cart(user_id, item_id, quantity) VALUES ($1, $2, $3) RETURNING *", [user_id, item_id, quantity]);
+
+        res.status(201).send(result.rows);
+    }
+    
+    res.status(401).send();
+})
+
+router.put("/cart", async (req, res) => {
+    if(req.user) {
+        const user_id = req.user.user_id;
+        const { item_id, quantity } = req.body;
+
+        const result = await db.query("UPDATE cart SET quantity = $3 WHERE user_id = $1 AND item_id = $2 RETURNING *", [user_id, item_id, quantity]);
+
+        res.status(200).send(result.rows);
+    }
+    res.status(401).send();
+})
+
+router.delete("/cart", async (req, res) => {
+    if(req.user) {
+        const user_id = req.user.user_id;
+        const { item_id } = req.body;
+
+        await db.query("DELETE FROM cart WHERE user_id = $1 AND item_id = $2", [user_id, item_id]);
+
+        res.status(204).send();
+    }
+})
+
+//Update order_history
+
+router.post("/order_history", async (req, res) => {
+    if(req.user) { 
+        const user_id = req.user.user_id;
+        
+    }
+})
+
 module.exports = router;

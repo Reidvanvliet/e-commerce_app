@@ -7,8 +7,11 @@ users (table users)
     address VARCHAR
 
 order_history (new table order_history)
-    item id (relate to items.id) INT
+    order_id INT
+    item_id (relate to items.id) INT
+    quantity INT
     order date DATE
+    user_id (realate to user.id) INT
 
 cart (new table cart)
     user id (relate to users) INT
@@ -37,6 +40,7 @@ API ENDPOINTS
 
 /order_history
     -GET
+    -POST
 
 /cart (store cart data in local storage when not logged in)
     -GET
@@ -49,3 +53,6 @@ API ENDPOINTS
     -POST (special admin)
     -PUT (special admin)
     -DELETE (special admin)
+
+
+Have to figure out how to create a new order with a unique id and all of the ordered itmes stored.
